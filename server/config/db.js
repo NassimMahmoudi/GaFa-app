@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 mongoose
   .connect(
     
-    "mongodb+srv://root:root@cluster0.4acnh.mongodb.net/healthyDB?authMechanism=DEFAULT",
+    "mongodb://localhost:27017/GaFa-DB",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
