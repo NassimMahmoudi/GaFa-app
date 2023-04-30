@@ -2,17 +2,9 @@ const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema(
+const jurySchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      minLength: 3,
-      maxLength: 55,
-      unique : true,
-      trim: true
-    },
-    lastName: {
+    username: {
       type: String,
       required: true,
       minLength: 3,
@@ -45,13 +37,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    bank: {
-      type: { 
-        bankName:String,
-        IBAN:String,
-        BIC: String,
-      },
-      required: true,
+    details : {
+      type: [
+        {
+          sexe:String,
+          height: String,
+          weight: String,
+          heart_Rate: String,
+          body_Temp: String,
+          level: String,
+        },
+      ],
     },
     
   },
@@ -67,18 +63,18 @@ userSchema.pre("save", async function(next) {
   next();
 });
 
-userSchema.statics.login = async function(email, password) {
-  const user = await this.findOne({ email });
-  if (user) {
-    const auth = await bcrypt.compare(password, user.password);
+jurySchema.statics.login = async function(username, password) {
+  const jury = await this.findOne({ username });
+  if (jury) {
+    const auth = await bcrypt.compare(password, jury.password);
     if (auth) {
-      return user;
+      return jury;
     }
     throw Error('incorrect password');
   }
-  throw Error('incorrect email')
+  throw Error('incorrect username')
 };
 
-const UserModel = mongoose.model("user", userSchema);
+const JuryModel = mongoose.model("jury", jurySchema);
 
-module.exports = UserModel;
+module.exports = JuryModel;
