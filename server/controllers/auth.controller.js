@@ -1,5 +1,6 @@
 const UserModel = require('../models/user.model.js');
 const AssociationModel = require('../models/association.model.js');
+const DocsModel = require('../models/docs.model.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -14,6 +15,7 @@ module.exports.signUp = async (req, res) => {
     try {
       const user = await UserModel.create({nameUser,lastName,birthDate, email,phone, password, picture });
       const association = await AssociationModel.create({ userId : user._id , name : name , description :description });
+      const docs = await DocsModel.create({ associationId : association._id });
       res.status(201).send({ message: "User Registered Successfully"});
     }
     catch(err) {

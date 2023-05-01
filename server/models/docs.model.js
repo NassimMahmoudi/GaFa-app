@@ -10,7 +10,8 @@ const docsSchema = new mongoose.Schema(
       type: [String]
     },
     isAccepted: {
-      type: String
+      type: String,
+      default: "false",
     },
   },
   {
