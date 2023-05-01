@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model.js');
+const AssociationModel = require('../models/association.model.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -7,11 +8,12 @@ const { signUpErrors, signInErrors } = require('../utils/errors.utils.js');
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 module.exports.signUp = async (req, res) => {
-  const {pseudo, email, password } = req.body
+  const {pseudo, email, password, description, name } = req.body
   if(req.file.filename){   
     let picture = '/uploads/'+req.file.filename;
     try {
       const user = await UserModel.create({pseudo, email, password, picture });
+      const association = await AssociationModel.create({ userId : user._id , name : name , description :description });
       res.status(201).send({ message: "User Registered Successfully"});
     }
     catch(err) {

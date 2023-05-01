@@ -15,12 +15,10 @@ router.get("/logout", checkUser,authController.logout);
 
 // user DB
 router.get("/", userController.getAllUsers);
-router.get("/accepted", userController.getAllAcceptedUsers);
 //search user
 router.get("/search/:name", userController.SearchUsers);
 router.get("/:id", userController.userInfo);
 router.put("/:id", requireAuth, userController.updateUser);
-router.put("/accept-user/:id", userController.acceptUser);
 router.delete("/:id", userController.deleteUser);
 
 // upload

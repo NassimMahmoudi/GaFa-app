@@ -6,8 +6,11 @@ const AssociationSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    recipes: {
-      type: [String]
+    name: {
+      type: String
+    },
+    description: {
+      type: String
     },
   },
   {
