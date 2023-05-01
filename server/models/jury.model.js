@@ -4,13 +4,13 @@ const bcrypt = require('bcrypt');
 
 const jurySchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
-      minLength: 3,
-      maxLength: 55,
-      unique : true,
-      trim: true
+    },
+    lastName: {
+      type: String,
+      required: true,
     },
     email: {
       type: String,
@@ -22,7 +22,7 @@ const jurySchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "User",},
+      default: "Jury",},
     password: {
       type: String,
       required: true,
@@ -33,22 +33,14 @@ const jurySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    age: {
-      type: String,
-      required: true,
+    birthDate: {
+        type: String,
+        required: true,
+      },
+    picture: {
+    type: String,
     },
-    details : {
-      type: [
-        {
-          sexe:String,
-          height: String,
-          weight: String,
-          heart_Rate: String,
-          body_Temp: String,
-          level: String,
-        },
-      ],
-    },
+    
     
   },
   {

@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const adminSchema = new mongoose.Schema(
   {
-    pseudo: {
+    userName: {
       type: String,
       required: true,
       minLength: 3,
