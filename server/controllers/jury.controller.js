@@ -7,12 +7,12 @@ const { signUpErrors, signInErrors } = require('../utils/errors.utils.js');
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 module.exports.signUp = async (req, res) => {
-  const {pseudo, email, password } = req.body
+  const {name, lastName, email, birthDate, password } = req.body
   if(req.file.filename){   
     let picture = '/uploads/'+req.file.filename;
     try {
-      const user = await UserModel.create({pseudo, email, password, picture });
-      res.status(201).send({ message: "User Registered Successfully"});
+      const user = await UserModel.create({name, lastName, email, birthDate, password, picture });
+      res.status(201).send({ message: "Jury Registered Successfully"});
     }
     catch(err) {
       const errors = signUpErrors(err);
