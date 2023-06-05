@@ -3,6 +3,8 @@ const AssociationModel = require('../models/association.model.js');
 const DocsModel = require('../models/docs.model.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const service= require("../service");
+var fs =require('fs');
 
 const { signUpErrors, signInErrors } = require('../utils/errors.utils.js');
 
@@ -16,7 +18,20 @@ module.exports.signUp = async (req, res) => {
       const user = await UserModel.create({nameUser,lastName,birthDate, email,phone, password, picture });
       const association = await AssociationModel.create({ userId : user._id , name : name , description :description });
       const docs = await DocsModel.create({ associationId : association._id });
-      res.status(201).send({ message: "User Registered Successfully"});
+      try {
+        // node mailer
+        //Send MAil(token,email,url app,password)
+        from = process.env.EMAIL;
+        subject="welcome to Gafa App";
+            
+        html = {};
+        html.content = fs.readFileSync(__dirname+"/../assets/new_user.html", "utf8");
+        html.firstname = user.nameUser;
+        service.Send_mail_new_client(from,user.email,subject,html);
+        res.status(201).send({ message: "User Registered Successfully and association was created"});
+    } catch (error) {
+        res.status(400).json({ message : error.message });
+    }
     }
     catch(err) {
       const errors = signUpErrors(err);

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model.js");
 const AdminModel = require("../models/admin.model.js");
+const JuryModel = require("../models/jury.model.js");
 
 module.exports.checkUser = (req, res, next) => {
   let token = req.headers['x-access-token'];
@@ -62,6 +63,37 @@ module.exports.checkAdmin = (req, res, next) => {
   }else {
     res.locals.admin = null;
     return res.status(401).json({ message : 'You must be admin to do this' });
+  }
+};
+module.exports.checkJury = (req, res, next) => {
+  let token = req.headers['x-access-token'];
+  if (token) {
+    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
+      if (err) {
+        res.locals.jury = null;
+        return res.status(401).json({ message : 'You must be admin to do this' });
+      } else {
+        console.log(decodedToken)
+        if(decodedToken.role != 'Jury'){
+          res.locals.jury = null;
+          return res.status(401).json({ message : 'You must be jury to do this' });
+        }else{
+          let admin = await JuryModel.findById(decodedToken.id);
+          if(admin){
+            res.locals.admin = admin;
+            next();
+          }else{
+            return res.status(401).json({ message : 'You must be jury to do this' });
+          }
+          
+        }
+        
+       
+      }
+    });
+  }else {
+    res.locals.jury = null;
+    return res.status(401).json({ message : 'You must be jury to do this' });
   }
 };
 
