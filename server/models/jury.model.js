@@ -55,8 +55,9 @@ jurySchema.pre("save", async function(next) {
   next();
 });
 
-jurySchema.statics.login = async function(username, password) {
-  const jury = await this.findOne({ username });
+jurySchema.statics.login = async function(email, password) {
+  const jury = await this.findOne({ email });
+  console.log(jury);
   if (jury) {
     const auth = await bcrypt.compare(password, jury.password);
     if (auth) {
@@ -64,7 +65,7 @@ jurySchema.statics.login = async function(username, password) {
     }
     throw Error('incorrect password');
   }
-  throw Error('incorrect username')
+  throw Error('incorrect email')
 };
 
 const JuryModel = mongoose.model("jury", jurySchema);
