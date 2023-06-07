@@ -27,7 +27,7 @@ module.exports.signUp = async (req, res) => {
         html = {};
         html.content = fs.readFileSync(__dirname+"/../assets/new_user.html", "utf8");
         html.firstname = user.nameUser;
-        service.Send_mail_new_client(from,user.email,subject,html);
+        // service.Send_mail_new_client(from,user.email,subject,html);
         res.status(201).send({ message: "User Registered Successfully and association was created"});
     } catch (error) {
         res.status(400).json({ message : error.message });
@@ -47,10 +47,10 @@ module.exports.signIn = async (req, res) => {
 
   try {
     const user = await UserModel.login(email, password);
-    let token = jwt.sign({id: user._id, nom: user.pseudo, role: user.role}, process.env.TOKEN_SECRET,{expiresIn:'3h'});
+    let token = jwt.sign({id: user._id, nom: user.nameUser, role: user.role}, process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3h'});
     res.status(200).send({
       id : user._id,
-      pseudo : user.pseudo,
+      nameUser : user.nameUser,
       email : user.email,
       accessToken : token
     });

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/user');
+const adminRoutes = require('./routes/admin');
 require('dotenv').config({path: './config/.env'});
 require('./config/db');
 
@@ -33,6 +34,7 @@ app.get('/jwtid', (req, res) => {
 
 // routes
 app.use('/api/user',userRoutes);
+app.use('/api/admin',adminRoutes);
 
 
 // server

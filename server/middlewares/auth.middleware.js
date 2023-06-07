@@ -6,7 +6,7 @@ const JuryModel = require("../models/jury.model.js");
 module.exports.checkUser = (req, res, next) => {
   let token = req.headers['x-access-token'];
   if (token) {
-    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
       if (err) {
         res.locals.user = null;
         return res.status(401).json({ message : 'You must register to do this' });
@@ -37,7 +37,7 @@ module.exports.checkUser = (req, res, next) => {
 module.exports.checkAdmin = (req, res, next) => {
   let token = req.headers['x-access-token'];
   if (token) {
-    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
       if (err) {
         res.locals.admin = null;
         return res.status(401).json({ message : 'You must be admin to do this' });
@@ -68,7 +68,7 @@ module.exports.checkAdmin = (req, res, next) => {
 module.exports.checkJury = (req, res, next) => {
   let token = req.headers['x-access-token'];
   if (token) {
-    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
       if (err) {
         res.locals.jury = null;
         return res.status(401).json({ message : 'You must be admin to do this' });
@@ -100,7 +100,7 @@ module.exports.checkJury = (req, res, next) => {
 module.exports.requireAuth = (req, res, next) => {
   let token = req.headers['x-access-token'];
   if (token) {
-    jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
       if (err) {
         return res.status(401).json({ message : 'You must register to do this' });
       } else {

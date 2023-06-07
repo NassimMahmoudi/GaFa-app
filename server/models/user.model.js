@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       minLength: 3,
       maxLength: 55,
-      trim: true
+      unique : false,
     },
     email: {
       type: String,
@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       default: "User",},
+    is_blocked: {
+      type: Boolean,
+      default: false,},
     password: {
       type: String,
       required: true,

@@ -6,18 +6,14 @@ module.exports.getAllUsers = async (req, res) => {
   const users = await UserModel.find().select("-password");
   res.status(200).json(users);
 };
-module.exports.getAllAcceptedUsers = async (req, res) => {
-  const users = await UserModel.find({is_verified : true}).select("-password");
-  res.status(200).json(users);
-};
 module.exports.SearchUsers = async (req, res) => {
-  let name_serached = req.params.name;
+  let name_searched = req.params.name;
   let resultSearch=[];
   const users = await UserModel.find().select("-password");
   if(users){
     users.forEach(element => {
-      let name=element.pseudo;
-      let position = name.indexOf(name_serached);
+      let name=element.nameUser;
+      let position = name.indexOf(name_searched);
       if(position>-1){
         resultSearch.push(element);
       }
@@ -27,15 +23,18 @@ module.exports.SearchUsers = async (req, res) => {
   res.status(200).json(resultSearch);
 };
 
-module.exports.userInfo = (req, res) => {
+module.exports.userInfo = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
-  UserModel.findById(req.params.id, (err, docs) => {
-    if (!err) res.send(docs);
-    else console.log("ID unknown : " + err);
-  }).select("-password");
-};
+  try{
+    let user = await UserModel.findById(req.params.id).select("-password");
+    console.log(user);
+    res.status(200).send(user);
+  }catch (err){
+   res.status(400).send(err.message);
+  }
+  };
 
 module.exports.updateUser = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
@@ -46,10 +45,9 @@ module.exports.updateUser = async (req, res) => {
       { _id: req.params.id },
       {
         $set: {
-          pseudo: req.body.pseudo,
+          nameUser: req.body.nameUser,
           email: req.body.email,
           password: req.body.password,
-          bio: req.body.bio,
         },
       },
       { new: true, upsert: true, setDefaultsOnInsert: true })
@@ -65,31 +63,11 @@ module.exports.deleteUser = async (req, res) => {
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    await UserModel.remove({ _id: req.params.id }).exec();
+    let user = await UserModel.findByIdAndRemove(req.params.id);
     res.status(200).json({ message: "Successfully deleted. " });
   } catch (err) {
-    return res.status(500).json({ message: err });
+    return res.status(500).json({ message: err.message });
   }
-};
-
-
-module.exports.acceptUser = (req, res) => {
-  if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send("ID unknown : " + req.params.id);
-
-  const updatedRecord = {
-    is_verified : true,
-  };
-
-  UserModel.findByIdAndUpdate(
-    req.params.id,
-    { $set: updatedRecord },
-    { new: true },
-    (err, docs) => {
-      if (!err) res.send(docs);
-      else console.log("Update error : " + err);
-    }
-  );
 };
 
 
@@ -122,4 +100,21 @@ module.exports.uploadProfil = (req, res) => {
     res.status(200).json({ message : 'You must select a new Image' });
   }
 };
+module.exports.blockUser = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
 
+  const updatedRecord = {
+    is_blocked : true,
+  };
+
+  try {let user = await UserModel.findByIdAndUpdate(
+    req.params.id,
+    { $set: updatedRecord },
+    { new: true },
+  );
+  res.status(200).send(user);
+}catch(err){
+  res.status(500).send("message : ", err.message);
+  }
+};

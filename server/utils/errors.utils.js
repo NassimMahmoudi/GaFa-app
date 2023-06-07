@@ -9,7 +9,10 @@ module.exports.signUpErrors = (err) => {
     if (err.message.includes("password"))
       errors.password = "The password must be at least 6 characters long";
   
-    if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("username"))
+    if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("lastName"))
+      errors.username = "This lastName is already taken";
+
+    if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("nameUser"))
       errors.username = "This username is already taken";
   
     if (err.code === 11000 && Object.keys(err.keyValue)[0].includes("email"))

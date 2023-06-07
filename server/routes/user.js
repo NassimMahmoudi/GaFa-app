@@ -16,9 +16,10 @@ router.get("/logout", checkUser,authController.logout);
 // user DB
 router.get("/", userController.getAllUsers);
 //search user
-router.get("/search/:name", userController.SearchUsers);
+router.get("/search/:name",checkAdmin, userController.SearchUsers);
 router.get("/:id", userController.userInfo);
 router.put("/:id", requireAuth, userController.updateUser);
+router.put("/block/:id", checkAdmin, userController.blockUser);
 router.delete("/:id", userController.deleteUser);
 
 // upload

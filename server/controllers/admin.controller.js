@@ -13,10 +13,10 @@ module.exports.signIn = async (req, res) => {
   
     try {
       const admin = await AdminModel.login(email, password);
-      let token = jwt.sign({id: admin._id, nom: admin.pseudo, role: admin.role}, process.env.TOKEN_SECRET,{expiresIn:'3h'});
+      let token = jwt.sign({id: admin._id, nom: admin.userName, role: admin.role}, process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3h'});
       res.status(200).send({
         id : admin._id,
-        pseudo : admin.pseudo,
+        userName : admin.userName,
         email : admin.email,
         accessToken : token
       });
@@ -25,11 +25,11 @@ module.exports.signIn = async (req, res) => {
     }
   }
   module.exports.signUp = async (req, res) => {
-    const {pseudo, email, password} = req.body
+    const {userName, email, password} = req.body
     let picture = req.file.filename;
   
     try {
-      const admin = await AdminModel.create({pseudo, email, password, picture });
+      const admin = await AdminModel.create({userName, email, password, picture });
       res.status(201).json({ message: "Admin Registered Successfully"});
     }
     catch(err) {
