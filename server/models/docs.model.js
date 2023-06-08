@@ -8,7 +8,7 @@ const docsSchema = new mongoose.Schema(
     },
     docs: {
       type: [
-        {
+        { 
           docPath: String,
           docName: String,
           timestamp: Date,
