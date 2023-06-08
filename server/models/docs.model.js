@@ -7,12 +7,16 @@ const docsSchema = new mongoose.Schema(
       required: true
     },
     docs: {
-      type: [String]
+      type: [
+        {
+          docPath: String,
+          docName: String,
+          timestamp: Date,
+        }
+      ],
+        
     },
-    isAccepted: {
-      type: String,
-      default: "false",
-    },
+  
   },
   {
     timestamps: true,
