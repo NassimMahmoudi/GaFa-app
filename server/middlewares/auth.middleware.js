@@ -71,7 +71,7 @@ module.exports.checkJury = (req, res, next) => {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
       if (err) {
         res.locals.jury = null;
-        return res.status(401).json({ message : 'You must be admin to do this' });
+        return res.status(401).json({ message : 'You must be Jury to do this' });
       } else {
         console.log(decodedToken)
         if(decodedToken.role != 'Jury'){
@@ -104,7 +104,7 @@ module.exports.requireAuth = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message : 'You must register to do this' });
       } else {
-        if((decodedToken.role != 'Admin') && (decodedToken.role != 'User') ){
+        if((decodedToken.role != 'Admin') && (decodedToken.role != 'User')&& (decodedToken.role != 'Jury') ){
           res.locals.admin = null;
           return res.status(401).json({ message : 'You must register to do this' });
         }else{

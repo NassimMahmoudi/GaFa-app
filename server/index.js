@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const juryRoutes = require('./routes/jury');
+const associationRoutes = require('./routes/association');
 require('dotenv').config({path: './config/.env'});
 require('./config/db');
 
@@ -37,6 +38,7 @@ app.get('/jwtid', (req, res) => {
 app.use('/api/user',userRoutes);
 app.use('/api/admin',adminRoutes);
 app.use('/api/jury',juryRoutes);
+app.use('/api/association',associationRoutes);
 
 
 // server

@@ -9,6 +9,9 @@ const AssociationSchema = new mongoose.Schema(
     name: {
       type: String
     },
+    is_accepted: {
+      type: Boolean,
+      default: false,},
     description: {
       type: String
     },

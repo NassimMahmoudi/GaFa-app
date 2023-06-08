@@ -26,7 +26,7 @@ module.exports.signIn = async (req, res) => {
   }
   module.exports.signUp = async (req, res) => {
     const {userName, email, password} = req.body
-    let picture = req.file.filename;
+    let picture = '/uploads/'+req.file.filename;
   
     try {
       const admin = await AdminModel.create({userName, email, password, picture });
@@ -38,15 +38,19 @@ module.exports.signIn = async (req, res) => {
     }
   }
  
-  module.exports.adminInfo = (req, res) => {
+  module.exports.adminInfo = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
       return res.status(400).send("ID unknown : " + req.params.id);
   
-      AdminModel.findById(req.params.id, (err, docs) => {
-      if (!err) res.send(docs);
-      else console.log("ID unknown : " + err);
-    }).select("-password");
-  };
+    try{
+      let admin = await AdminModel.findById(req.params.id).select("-password");
+      console.log(admin);
+      res.status(200).send(admin);
+    }catch (err){
+     res.status(400).send(err.message);
+    }
+    };
+  
 module.exports.logout = async (req, res) => {
   let token = req.headers['x-access-token'];
   let randomNumberToAppend = toString(Math.floor((Math.random() * 1000) + 1));

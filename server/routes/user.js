@@ -14,10 +14,10 @@ router.post("/login", authController.signIn);
 router.get("/logout", checkUser,authController.logout);
 
 // user DB
-router.get("/", userController.getAllUsers);
+router.get("/", requireAuth,userController.getAllUsers);
 //search user
-router.get("/search/:name",checkAdmin, userController.SearchUsers);
-router.get("/:id", userController.userInfo);
+router.get("/search/:name",requireAuth, userController.SearchUsers);
+router.get("/:id", requireAuth,userController.userInfo);
 router.put("/:id", requireAuth, userController.updateUser);
 router.put("/block/:id", checkAdmin, userController.blockUser);
 router.delete("/:id", userController.deleteUser);
